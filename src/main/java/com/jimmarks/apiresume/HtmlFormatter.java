@@ -146,7 +146,7 @@ public class HtmlFormatter {
 		String copy_24 = "Advanced RestAPI Topics";
 		String copy_25 = "The Restful API requests demonstrated on this page are all GET requests. This illustrates a basic API model. Some more advanced topics in Rest API solutions are not covered here for simplicity. In particular, POST requests and OAUTH2 authentication and security are not addressed. POST requests require preparation of a post body. A good tool for exploring post requests is Google Postman. Especially in an implementation of POST requests it is important to follow good security protocols. In such an environment HTTPS secure sockets provide encrypted communications to shield communications and OAUTH2 authentication protocols assure that only privileged POST requests will be accepted.";
 		String copy_26 = "Source Code";
-		String copy_27 = "The source code for this project may be found at: <a href=\"https://github.com/james-david-marks/apiresume\">https://github.com/james-david-marks/jimmarks</a>";
+		String copy_27 = "The source code for this project may be found at: <a href=\"https://github.com/james-david-marks/apiresume\">https://github.com/james-david-marks/apiresume</a>";
 		
 		StringBuffer buf = new StringBuffer();
 		buf.append("<DIV class=\"row gutters\">");
