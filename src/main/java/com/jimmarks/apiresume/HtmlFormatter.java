@@ -77,7 +77,7 @@ public class HtmlFormatter {
 		buf.append("</DIV>");
 		buf.append("<DIV class=\"row\">");
 		buf.append(String.format("<DIV class=\"col-lg-12  bold_alert\"><label >%s</label></DIV>", "Requested resource unknown."));
-		buf.append(String.format("<DIV class=\"column_image\"><img src=\"%s/panda404.png\" height=\"300px\" ></DIV>", context));
+		buf.append(String.format("<DIV class=\"column_image\"><img src=\"images/panda404.png\" height=\"300px\" ></DIV>", context));
 		buf.append("</DIV>");
 		return buf.toString();
 	}
@@ -266,7 +266,7 @@ public class HtmlFormatter {
 		buf.append(String.format("<option value=\"education\"%s>Education</option>", selected.toLowerCase().equals("education") && tagId.equals("typehtml") ? " selected" : ""));
 		buf.append(String.format("<option value=\"community\"%s>Community</option>", selected.toLowerCase().equals("community") && tagId.equals("typehtml") ? " selected" : ""));
 		buf.append(String.format("</select>"));
-		App.debuglogger.info(selected + " : " + buf.toString());
+		App.DEBUGLOGGER.info(selected + " : " + buf.toString());
 		return buf.toString();
 	}
 	public String scripts()

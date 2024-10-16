@@ -10,15 +10,18 @@ import java.sql.Statement;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.jimmarks.apiresume.App;
+import com.jimmarks.apiresume.ResourceHelper;
 
 public class ModelProvider {
 
     public ResultSet reader;
 	public Connection connection = null;
 	
+    private final String DBPORT = ResourceHelper.getConstantFromConfig("modelprovider.port", App.DEPLOYMENT_CONFIG);
+
     private String source = "localhost";
-    private String userId;
-    private String password;
+    private String userId = ResourceHelper.getConstantFromConfig("modelprovider.user", App.DEPLOYMENT_CONFIG);
+    private String password = ResourceHelper.getConstantFromConfig("modelprovider.password", App.DEPLOYMENT_CONFIG);
     private String catalog;
 
 	public String getSource(){ return source; } 
@@ -31,8 +34,6 @@ public class ModelProvider {
 	public void setCatalog(String catalog){ this.catalog = catalog; }
 
 	public ModelProvider(String catalog){
-		this.userId = App.APPLICATION_PROPERTIES.getString("modelprovider.user");
-		this.password = App.APPLICATION_PROPERTIES.getString("modelprovider.password");
 		this.catalog = catalog;
 	}
 
@@ -89,7 +90,7 @@ public class ModelProvider {
 	}
 	public String makeMySqlConnectionString(String source, String catalog)
 	{
-		String connectString = String.format("jdbc:mysql://%s:3306/%s", source, catalog);
+		String connectString = String.format("jdbc:mysql://%s:%s/%s", source, DBPORT, catalog);
 		return connectString;
 	}
 	public ResultSet mySqlDispatch(String cmdText)
@@ -109,7 +110,7 @@ public class ModelProvider {
 			reader = cmd.executeQuery(cmdText);
 		}
 		catch(Exception e){
-			App.applogger.error("GetConnection failed: " + e.getMessage());
+			App.APPLOGGER.error("GetConnection failed: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return reader;
@@ -132,7 +133,7 @@ public class ModelProvider {
 			rows = cmd.executeUpdate(cmdText);			
 		}
 		catch(Exception e){
-			App.applogger.error("GetConnection failed: " + e.getMessage());
+			App.APPLOGGER.error("GetConnection failed: " + e.getMessage());
 			e.printStackTrace();
 		};       
 		return rows;

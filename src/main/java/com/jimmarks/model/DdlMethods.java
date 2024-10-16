@@ -24,22 +24,22 @@ public class DdlMethods {
 		ResultSet result = modelProvider.mySqlQuery(sqlCheckForSchema(SCHEMA_NAME));
 		if(!result.next())
 		{
-			App.applogger.info("creating schema");
+			App.APPLOGGER.info("creating schema");
 			modelProvider.mySqlExecuteNonQuery(sqlCreateSchema(SCHEMA_NAME));
 		}
 		else
 		{
-			App.applogger.info("schema exists");
+			App.APPLOGGER.info("schema exists");
 		}
 		modelProvider = new ModelProvider(SCHEMA_NAME);
 		if(!modelProvider.checkTableExists(TABLE_NAME, modelProvider.connection))
 		{
-			App.applogger.info("creating table");
+			App.APPLOGGER.info("creating table");
 			modelProvider.mySqlExecuteNonQuery(sqlCreateTableResumeLine());
 		}
 		else
 		{
-			App.applogger.info("table exists");
+			App.APPLOGGER.info("table exists");
 		}
 	}
 	public String buildHtmlDocument(ResultSet result, boolean includeDetail) throws SQLException
@@ -139,14 +139,14 @@ public class DdlMethods {
 		ResultSet result = modelProvider.mySqlQuery(sqlSelectName(RESUME_NAME));
 		if(!result.next())
 		{
-			App.applogger.info(String.format("loading %s", RESUME_NAME));
+			App.APPLOGGER.info(String.format("loading %s", RESUME_NAME));
 			String insertSql = sqlInsert_testData();
-			App.debuglogger.info(insertSql);
+			App.DEBUGLOGGER.info(insertSql);
 			modelProvider.mySqlExecuteNonQuery(insertSql);
 		}
 		else
 		{
-			App.applogger.info(String.format("found %s", RESUME_NAME));
+			App.APPLOGGER.info(String.format("found %s", RESUME_NAME));
 		}
 	}
 	public String sqlCheckForSchema(String schemaName)

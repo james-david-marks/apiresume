@@ -3,96 +3,96 @@
 package com.jimmarks.apiresume;
 
 import java.util.Enumeration;
+import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import com.jimmarks.model.ResumeLine;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("")
-public class AppErrorController implements ErrorController{
-
+public class AppErrorController implements ErrorController
+{
     private final static String ERROR_PATH = "/error";
 
-	@RequestMapping(ERROR_PATH)
-	public String error(HttpServletRequest request, HttpServletResponse response) {
-		App.applogger.info("error service invoked");
-		HtmlFormatter html = new HtmlFormatter();
-		return html.getLandingPage_build(getErrorHtml(request));		
-	}
-
-	private String getRequestEnumeration(HttpServletRequest request) {
-		StringBuffer buf = new StringBuffer();
-		Enumeration attributes = request.getAttributeNames();
-		while(attributes.hasMoreElements())
-		{
-			String name = attributes.nextElement().toString();
-			buf.append(String.format("%s", name));
-			if(name.equals("javax.servlet.error.message"))
-			{
-				String attribute = request.getAttribute(name).toString();
-				buf.append(String.format(": %s", attribute));
-			}
-			buf.append(String.format("<br/>"));
-		}
-		return buf.toString();
-	}
-
-	@Override
-	public String getErrorPath() {		
+	public String getErrorPath() {
 		return ERROR_PATH;
 	}
 	
-	private String getErrorHtml(HttpServletRequest request) {
+	@RequestMapping(ERROR_PATH)
+	public @ResponseBody String handleError(HttpServletRequest request) {
+		App.APPLOGGER.info("error service invoked");
 		HtmlFormatter html = new HtmlFormatter();
-		final String CONTEXT_PATH = "javax.servlet.forward.context_path";
-		final String FORWARD_MAPPING = "javax.servlet.forward.forward_mapping";
-		final String MESSAGE = "javax.servlet.error.message";
-		final String REQUEST_URI = "javax.servlet.forward.request_uri";
-		final String SERVLET_PATH = "javax.servlet.forward.servlet_path";
-		final String STATUS = "javax.servlet.error.status_code";
-		String contextPath = "unknown";
-		String forwardMapping = "unknown";
+		String errorHtml = getErrorHtml(request);
+		return html.getLandingPage_build(errorHtml);
+	}
+
+	private String getErrorHtml(HttpServletRequest request) {
+		final String CONTEXT = "org.springframework.web.servlet.DispatcherServlet.CONTEXT";
+		final String ERROR = "org.springframework.boot.web.servlet.error.DefaultErrorAttributes.ERROR";
+		final String EXCEPTION = "org.springframework.web.servlet.DispatcherServlet.EXCEPTION";
+		final String MESSAGE = "jakarta.servlet.error.message";
+		final String REQUEST_URI = "jakarta.servlet.error.request_uri";
+		final String RESOURCE_URL_PROVIDER = "org.springframework.web.servlet.resource.ResourceUrlProvider";
+		final String SERVLET_PATH = "org.springframework.web.util.ServletRequestPathUtils.PATH";
+		final String STATUS_CODE = "jakarta.servlet.error.status_code";
+		
+		String context = "unknown";
+		String error = "unknown";
+		String exception = "unknown";
 		String message = "unknown";
-		String requestUri = "unknown";
+		String resourceUrlProvider = "unknown";
+		String request_uri = "unknown";
 		String servletPath = "unknown";
-		String status = "unknown";
-		Enumeration attributes = request.getAttributeNames();
-		while(attributes.hasMoreElements())
+		String status_code = "unknown";
+		
+		HtmlFormatter html = new HtmlFormatter();
+		Enumeration<String> attributeNames = request.getAttributeNames();
+		while(attributeNames.hasMoreElements())
 		{
-			String name = attributes.nextElement().toString();
+			String name = attributeNames.nextElement().toString();
 			switch(name)
 			{
 				default:
 					break;
-				case CONTEXT_PATH:
-					contextPath = request.getAttribute(name).toString();
+				case CONTEXT:
+					context = request.getAttribute(name).toString();
 					break;
-				case FORWARD_MAPPING:
-					forwardMapping = request.getAttribute(name).toString();
+				case ERROR:
+					error = request.getAttribute(name).toString();
+					break;
+				case EXCEPTION:
+					exception = request.getAttribute(name).toString();
 					break;
 				case MESSAGE:
 					message = request.getAttribute(name).toString();
 					break;
 				case REQUEST_URI:
-					requestUri = request.getAttribute(name).toString();
+					request_uri = request.getAttribute(name).toString();
+					break;
+				case RESOURCE_URL_PROVIDER:
+					resourceUrlProvider = request.getAttribute(name).toString();
 					break;
 				case SERVLET_PATH:
 					servletPath = request.getAttribute(name).toString();
 					break;
-				case STATUS:
-					status = request.getAttribute(name).toString();
+				case STATUS_CODE:
+					status_code = request.getAttribute(name).toString();
 					break;
 			}
 		}
-		return html.getErrorDivs(status, message, contextPath);
-	}
-	
+		return html.getErrorDivs(status_code, message, context);
+	}	
 }
 
 

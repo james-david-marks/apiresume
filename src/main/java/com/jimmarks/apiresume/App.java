@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-//`import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.View;
 
 @SpringBootApplication
@@ -32,9 +31,10 @@ import org.springframework.web.servlet.View;
 @EnableAutoConfiguration
 public class App extends SpringBootServletInitializer {
 	
-	public static final Logger applogger = getAppLogger(App.class, "apiresume-app", false);
-	public static final Logger debuglogger = getAppLogger(App.class, "apiresume-debug", true);
-	public static final PropertiesConfiguration APPLICATION_PROPERTIES = getApplicationProperties();
+	public static final Logger APPLOGGER = getAppLogger(App.class, "apiresume-app", false);
+	public static final Logger DEBUGLOGGER = getAppLogger(App.class, "apiresume-debug", true);
+	public static final PropertiesConfiguration DEPLOYMENT_CONFIG = ResourceHelper.getDeploymentConfig();
+	public static final PropertiesConfiguration APP_CONFIG = ResourceHelper.getAppConfig();
 	
     public static void main(String[] args) {
     	BasicConfigurator.configure();
@@ -58,26 +58,6 @@ public class App extends SpringBootServletInitializer {
         }
     }
     
-    private static PropertiesConfiguration getApplicationProperties()
-    {
-		final String APPLICATION_PROPERTIES = "/application.properties";
-		PropertiesConfiguration config = new PropertiesConfiguration();
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL url = classLoader.getResource(APPLICATION_PROPERTIES);
-		try
-		{
-			String filePathEncoded = url.getPath();
-			String filePath = URLDecoder.decode(filePathEncoded, StandardCharsets.UTF_8.toString());
-			App.debuglogger.info(filePath);
-			config.load(filePath);
-			App.applogger.info("Loaded application.properties");
-		}
-		catch(Exception e)
-		{
-			App.applogger.error("Properties files failure");
-		}
-		return config;
-    }
 	public static Logger getAppLogger(Class<?> classObject, String filename, boolean forDebugOnly) {
 		final String catalina_base = System.getProperty("catalina.base");
 		

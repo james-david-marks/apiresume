@@ -26,13 +26,13 @@ public class JsonController {
 	
 	@RequestMapping("/")
 	public String restapi() {
-		App.applogger.info("called: restapi-json");
+		App.APPLOGGER.info("called: restapi-json");
 		return "restapi/json";
 	}
 
 	@RequestMapping("/getall")
 	public ResponseEntity<String> getAll() throws SQLException {
-		App.applogger.info("called: getall");
+		App.APPLOGGER.info("called: getall");
 		DdlMethods ddl = new DdlMethods();
 		JsonObject json = ddl.getJsonAll(false);
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(json.toString(), HttpStatus.OK);
@@ -40,8 +40,8 @@ public class JsonController {
 	}
 	
 	@RequestMapping(value = "/getid/{id}", method = RequestMethod.GET)
-	public ResponseEntity<String> get(@PathVariable long id) throws SQLException {
-		App.applogger.info("called: getid");
+	public ResponseEntity<String> get(@PathVariable("id") long id) throws SQLException {
+		App.APPLOGGER.info("called: getid");
 		DdlMethods ddl = new DdlMethods();
 		JsonObject json = ddl.getJsonById(id);
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(json.toString(), HttpStatus.OK);
@@ -49,8 +49,8 @@ public class JsonController {
 	}
 
 	@RequestMapping(value = "/gettype/{type}", method = RequestMethod.GET)
-	public ResponseEntity<String> get(@PathVariable String type) throws SQLException {
-		App.applogger.info("called: gettype");
+	public ResponseEntity<String> get(@PathVariable("type") String type) throws SQLException {
+		App.APPLOGGER.info("called: gettype");
 		DdlMethods ddl = new DdlMethods();
 		JsonObject json = ddl.getJsonByType(type);
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(json.toString(), HttpStatus.OK);
@@ -59,7 +59,7 @@ public class JsonController {
 
 	@RequestMapping("/listall")
 	public ResponseEntity<String> listAll() throws SQLException {
-		App.applogger.info("called: listall");
+		App.APPLOGGER.info("called: listall");
 		DdlMethods ddl = new DdlMethods();
 		JsonObject json = ddl.getJsonAll(true);
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(json.toString(), HttpStatus.OK);
@@ -67,8 +67,8 @@ public class JsonController {
 	}
 
 	@RequestMapping(value = "/search/{term}", method = RequestMethod.GET)
-	public ResponseEntity<String> getSearch(@PathVariable String term) throws SQLException {
-		App.applogger.info("called: search");
+	public ResponseEntity<String> getSearch(@PathVariable("term") String term) throws SQLException {
+		App.APPLOGGER.info("called: search");
 		DdlMethods ddl = new DdlMethods();
 		JsonObject json = ddl.getJsonBySearch(term);
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(json.toString(), HttpStatus.OK);
